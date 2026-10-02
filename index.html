@@ -3,58 +3,62 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>六级词汇本 v1.00.4</title>
+<title>六级词汇本 v1.00.5</title>
 <style>
-:root{color-scheme:light;--pink:#e96f7e;--purple:#66539d;--line:#d9dce4;--blank:#edf1f5;--bg:#f4f5f8;--ink:#2e3038;--ctrl-bg:#ffffff;--ctrl-border:#cbd0da;--ctrl-text:#2e3038;--ctrl-placeholder:#858b98}
+:root{color-scheme:light;--pink:#e96f7e;--purple:#66539d;--header-purple:#66539d;--line:#d9dce4;--blank:#edf1f5;--bg:#fff;--paper:#fff;--ink:#2e3038;--muted:#666;--footer:#777;--ctrl-bg:#fff;--ctrl-border:#cbd0da;--ctrl-text:#2e3038;--ctrl-placeholder:#858b98;--ctrl-hover:#f7f7fa;--toolbar-bg:rgba(255,255,255,.97);--meaning-bg:#fafafa;--dot:#e4e6eb;--word-hover-bg:#fff2f4;--word-hover-ink:#bd4357;--details-bg:#f6f6fa;--badge-bg:#fff0f2;--badge-ink:#b83d52;--pen-black:#202124;--pen-red:#d32f2f;--pen-blue:#1565c0}
+:root[data-theme="dark"]{color-scheme:dark;--pink:#b54d61;--purple:#c6b7ff;--header-purple:#615087;--line:#454954;--blank:#222730;--bg:#000;--paper:#151820;--ink:#eef0f6;--muted:#b8bece;--footer:#aeb4c5;--ctrl-bg:#222631;--ctrl-border:#50596c;--ctrl-text:#eef0f6;--ctrl-placeholder:#acb2c1;--ctrl-hover:#303645;--toolbar-bg:rgba(21,24,32,.98);--meaning-bg:#1d222d;--dot:#586074;--word-hover-bg:#342531;--word-hover-ink:#ffafb9;--details-bg:#222735;--badge-bg:#38202a;--badge-ink:#ffadc0;--pen-black:#f0f1f5;--pen-red:#ff6b6b;--pen-blue:#70aaff}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Arial,"Microsoft YaHei","PingFang SC",sans-serif}
-.toolbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);border-bottom:1px solid #ddd;padding:9px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar{position:sticky;top:0;z-index:100;background:var(--toolbar-bg);border-bottom:1px solid var(--line);padding:9px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .brand{font-weight:900;color:var(--purple);font-size:18px;margin-right:4px}
-input,button{font:inherit;appearance:none;-webkit-appearance:none;background:var(--ctrl-bg);color:var(--ctrl-text)}
+input,button,select{font:inherit;background:var(--ctrl-bg);color:var(--ctrl-text)}
+input,button{appearance:none;-webkit-appearance:none}
+.control{display:inline-flex;gap:6px;align-items:center;font-size:13px;white-space:nowrap}
+.control select{border:1px solid var(--ctrl-border);border-radius:9px;padding:7px 8px;cursor:pointer}
 input::placeholder{color:var(--ctrl-placeholder);opacity:1}
 .search{flex:1;min-width:180px;max-width:360px;padding:8px 10px;border:1px solid var(--ctrl-border);border-radius:9px;background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important}
 button{border:1px solid var(--ctrl-border);background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important;border-radius:9px;padding:7px 10px;cursor:pointer}
-button:hover{background:#f7f7fa!important}
+button:hover{background:var(--ctrl-hover)!important}
 .mode.active,.cover.active{border-color:var(--purple);background:var(--ctrl-bg)!important;color:var(--purple)!important;font-weight:700;box-shadow:0 0 0 1px rgba(102,83,157,.08) inset}
 .pagebox{width:62px;padding:7px;border:1px solid var(--ctrl-border);border-radius:8px;background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important;text-align:center}
-.status{font-size:12px;color:#666}
+.status{font-size:12px;color:var(--muted)}
 .wrap{padding:16px}
-.sheet{position:relative;width:min(920px,100%);margin:auto;background:#fff;box-shadow:0 5px 26px rgba(0,0,0,.10);padding:27px 28px 20px;min-height:700px;overflow:hidden}
+.sheet{position:relative;width:min(920px,100%);margin:auto;background:var(--paper);box-shadow:0 5px 26px rgba(0,0,0,.10);padding:27px 28px 20px;min-height:700px;overflow:hidden}
 .sheethead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
 .title{font-size:28px;font-weight:900;font-style:italic;color:var(--purple)}
-.meta{font-size:12px;color:#666} .meta b{color:var(--purple)}
+.meta{font-size:12px;color:var(--muted)} .meta b{color:var(--purple)}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}
 .cell{min-height:31px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 8px;display:flex;align-items:center;font-size:13px}
-.head{color:white;font-weight:700;justify-content:center} .pink{background:var(--pink)} .purple{background:var(--purple)}
-.blank{background:var(--blank)} .meaning{background:#fafafa;font-size:12px;line-height:1.3}
+.head{color:white;font-weight:700;justify-content:center} .pink{background:var(--pink)} .purple{background:var(--header-purple)}
+.blank{background:var(--blank)} .meaning{background:var(--meaning-bg);font-size:12px;line-height:1.3}
 .word{font-weight:700;cursor:pointer;position:relative;padding-left:20px}
-.word::before{content:"";position:absolute;left:7px;top:50%;width:9px;height:9px;background:#e4e6eb;transform:translateY(-50%)}
-.word:hover{background:#fff2f4;color:#bd4357}
+.word::before{content:"";position:absolute;left:7px;top:50%;width:9px;height:9px;background:var(--dot);transform:translateY(-50%)}
+.word:hover{background:var(--word-hover-bg);color:var(--word-hover-ink)}
 body.hide-english .word-text,body.hide-chinese .meaning-text{visibility:hidden;user-select:none}
-.footer{margin-top:14px;display:flex;justify-content:space-between;font-size:11px;color:#777}
+.footer{margin-top:14px;display:flex;justify-content:space-between;font-size:11px;color:var(--footer)}
 #ink{position:absolute;inset:0;width:100%;height:100%;z-index:40;pointer-events:none;touch-action:none}
 body.draw #ink,body.erase #ink{pointer-events:auto;cursor:crosshair}
 body.draw .word,body.erase .word{pointer-events:none}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.23);z-index:200}
 .overlay.show{display:block}
-.drawer{position:fixed;top:0;right:0;height:100vh;width:min(430px,94vw);z-index:210;background:#fff;box-shadow:-8px 0 30px rgba(0,0,0,.2);padding:22px;overflow:auto;transform:translateX(104%);transition:.18s}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(430px,94vw);z-index:210;background:var(--paper);box-shadow:-8px 0 30px rgba(0,0,0,.2);padding:22px;overflow:auto;transform:translateX(104%);transition:.18s}
 .drawer.open{transform:none} .close{float:right;border:0;font-size:20px}
 .dw{font-size:30px;font-weight:900;color:var(--purple);margin:18px 0 6px}
-.dm{background:#f6f6fa;border-radius:10px;padding:10px 12px;line-height:1.55;font-size:14px}
-.badge{display:inline-block;margin-top:14px;padding:4px 9px;border-radius:999px;background:#fff0f2;color:#b83d52;font-weight:700;font-size:12px}
+.dm{background:var(--details-bg);border-radius:10px;padding:10px 12px;line-height:1.55;font-size:14px}
+.badge{display:inline-block;margin-top:14px;padding:4px 9px;border-radius:999px;background:var(--badge-bg);color:var(--badge-ink);font-weight:700;font-size:12px}
 .note{margin-top:10px;font-size:15px;line-height:1.7}
-.rel{padding:10px 0;border-bottom:1px solid #eee} .rel b{font-size:17px} .rel span{display:block;color:#666;margin-top:4px;font-size:13px;line-height:1.4}
+.rel{padding:10px 0;border-bottom:1px solid var(--line)} .rel b{font-size:17px} .rel span{display:block;color:var(--muted);margin-top:4px;font-size:13px;line-height:1.4}
 .hit{outline:3px solid #ffd56a;outline-offset:-3px}
 @media(max-width:720px){
   .wrap{padding:5px} .sheet{padding:17px 8px;min-height:auto} .title{font-size:23px}
   .grid{grid-template-columns:1.05fr .7fr .7fr 1.55fr} .cell{font-size:11px;padding:5px 4px;min-height:28px} .meaning{font-size:10px}
 }
-@media print{.toolbar,.drawer,.overlay{display:none!important}body{background:#fff}.wrap{padding:0}.sheet{box-shadow:none;width:100%;padding:12mm}}
+@media print{:root,:root[data-theme="dark"]{color-scheme:light;--paper:#fff;--ink:#2e3038;--line:#d9dce4;--blank:#edf1f5;--meaning-bg:#fafafa;--pink:#e96f7e;--purple:#66539d;--header-purple:#66539d;--muted:#666;--footer:#777;--dot:#e4e6eb;--pen-black:#202124;--pen-red:#d32f2f;--pen-blue:#1565c0}.toolbar,.drawer,.overlay{display:none!important}body{background:#fff}.wrap{padding:0}.sheet{box-shadow:none;width:100%;padding:12mm}}
 </style>
 </head>
 <body>
 <div class="toolbar">
-  <div class="brand">六级词汇本 v1.00.4</div>
+  <div class="brand">六级词汇本 v1.00.5</div>
   <input id="search" class="search" placeholder="搜索单词，按 Enter 定位">
   <button id="prev">←</button>
   <input id="pageInput" class="pagebox" type="number" min="1" max="150" value="1" title="输入页码后按 Enter">
@@ -64,6 +68,8 @@ body.draw .word,body.erase .word{pointer-events:none}
   <button id="browseBtn" class="mode active">👆 浏览</button>
   <button id="penBtn" class="mode">✍ 手写</button>
   <button id="eraserBtn" class="mode">⌫ 橡皮</button>
+  <label class="control" for="penColor">笔色 <select id="penColor" aria-label="笔的颜色" title="黑色笔迹在深色背景下自动以浅色显示"><option value="black">黑色</option><option value="red">红色</option><option value="blue">蓝色</option></select></label>
+  <label class="control" for="themeSelect">背景 <select id="themeSelect" aria-label="网页背景颜色"><option value="white">白色</option><option value="black">黑色</option><option value="system">跟随系统</option></select></label>
   <button id="clearBtn">清空本页笔迹</button>
   <span class="status">第 <b id="pno">1</b>/150 页 · 2995 词</span>
 </div>
@@ -89,12 +95,37 @@ const pno = document.getElementById("pno");
 const pageInput = document.getElementById("pageInput");
 const drawer = document.getElementById("drawer");
 const overlay = document.getElementById("overlay");
+const penColorSelect = document.getElementById("penColor");
+const themeSelect = document.getElementById("themeSelect");
+const PEN_COLORS = ["black", "red", "blue"];
+const THEME_OPTIONS = ["white", "black", "system"];
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+let penColor = "black";
+let themePreference = "white";
 let page = 1;
 let mode = "browse";
 let strokes = [];
 let currentStroke = null;
 let canvas = null, ctx = null, dpr = 1;
 
+function savePreferences() {
+  try { localStorage.setItem("cet6_preferences_v1", JSON.stringify({penColor, theme:themePreference})); } catch(e) {}
+}
+function applyTheme() {
+  const dark = themePreference === "black" || (themePreference === "system" && systemTheme.matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  redraw();
+}
+function loadPreferences() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("cet6_preferences_v1") || "{}");
+    if (PEN_COLORS.includes(saved?.penColor)) penColor = saved.penColor;
+    if (THEME_OPTIONS.includes(saved?.theme)) themePreference = saved.theme;
+  } catch(e) {}
+  penColorSelect.value = penColor;
+  themeSelect.value = themePreference;
+  applyTheme();
+}
 function esc(s) {
   return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 }
@@ -111,7 +142,14 @@ function saveInk() {
   try { localStorage.setItem(inkKey(), JSON.stringify(strokes)); } catch(e) {}
 }
 function loadInk() {
-  try { strokes = JSON.parse(localStorage.getItem(inkKey()) || "[]"); }
+  try {
+    const saved = JSON.parse(localStorage.getItem(inkKey()) || "[]");
+    strokes = Array.isArray(saved) ? saved.map(s => {
+      const points = Array.isArray(s) ? s : s?.points;
+      if (!Array.isArray(points)) return null;
+      return {color:PEN_COLORS.includes(s?.color) ? s.color : "black", points:points.filter(p => p && Number.isFinite(p.x) && Number.isFinite(p.y))};
+    }).filter(s => s && s.points.length) : [];
+  }
   catch(e) { strokes = []; }
   redraw();
 }
@@ -137,20 +175,22 @@ function redraw() {
   if (!ctx || !canvas) return;
   const r = sheet.getBoundingClientRect();
   ctx.clearRect(0,0,r.width,r.height);
-  ctx.strokeStyle = "#202124";
+  const palette = getComputedStyle(document.documentElement);
   ctx.lineWidth = 2.6;
   for (const s of strokes) {
-    if (!s || !s.length) continue;
+    if (!s || !s.points.length) continue;
+    const points = s.points;
+    ctx.strokeStyle = palette.getPropertyValue("--pen-" + s.color).trim();
     ctx.beginPath();
-    ctx.moveTo(s[0].x,s[0].y);
-    for (let i=1;i<s.length;i++) ctx.lineTo(s[i].x,s[i].y);
-    if (s.length===1) ctx.lineTo(s[0].x+.01,s[0].y+.01);
+    ctx.moveTo(points[0].x,points[0].y);
+    for (let i=1;i<points.length;i++) ctx.lineTo(points[i].x,points[i].y);
+    if (points.length===1) ctx.lineTo(points[0].x+.01,points[0].y+.01);
     ctx.stroke();
   }
 }
 function eraseAt(p) {
   const radius = 18;
-  strokes = strokes.filter(s => !s.some(q => Math.hypot(q.x-p.x,q.y-p.y) < radius));
+  strokes = strokes.filter(s => !s.points.some(q => Math.hypot(q.x-p.x,q.y-p.y) < radius));
   saveInk(); redraw();
 }
 function pointerDown(ev) {
@@ -159,7 +199,7 @@ function pointerDown(ev) {
   canvas.setPointerCapture(ev.pointerId);
   const p = point(ev);
   if (mode === "erase") { eraseAt(p); return; }
-  currentStroke = [p];
+  currentStroke = {color:penColor, points:[p]};
   strokes.push(currentStroke);
   redraw();
 }
@@ -168,11 +208,11 @@ function pointerMove(ev) {
   ev.preventDefault();
   const p = point(ev);
   if (mode === "erase") { eraseAt(p); return; }
-  if (currentStroke) { currentStroke.push(p); redraw(); }
+  if (currentStroke) { currentStroke.points.push(p); redraw(); }
 }
 function pointerUp(ev) {
   if (mode === "browse") return;
-  if (currentStroke) { currentStroke.push(point(ev)); currentStroke = null; saveInk(); redraw(); }
+  if (currentStroke) { currentStroke.points.push(point(ev)); currentStroke = null; saveInk(); redraw(); }
   try { canvas.releasePointerCapture(ev.pointerId); } catch(e) {}
 }
 function mountCanvas() {
@@ -202,7 +242,7 @@ function renderPage(n) {
   }
   sheet.innerHTML = `
     <div class="sheethead">
-      <div><div class="title">六级词汇本 v1.00.4</div><div class="meta">Title: <b>六级</b></div></div>
+      <div><div class="title">六级词汇本 v1.00.5</div><div class="meta">Title: <b>六级</b></div></div>
       <div class="meta">Date&nbsp;&nbsp;/&nbsp;&nbsp;/</div>
     </div>
     <div class="grid">
@@ -250,6 +290,9 @@ pageInput.addEventListener("change", () => renderPage(pageInput.value));
 document.getElementById("browseBtn").onclick = () => setMode("browse");
 document.getElementById("penBtn").onclick = () => setMode("draw");
 document.getElementById("eraserBtn").onclick = () => setMode("erase");
+penColorSelect.addEventListener("change", () => { penColor = penColorSelect.value; savePreferences(); });
+themeSelect.addEventListener("change", () => { themePreference = themeSelect.value; savePreferences(); applyTheme(); });
+systemTheme.addEventListener("change", () => { if (themePreference === "system") applyTheme(); });
 document.getElementById("hideChineseBtn").onclick = ev => toggleCover("chinese", ev.currentTarget, "中文");
 document.getElementById("hideEnglishBtn").onclick = ev => toggleCover("english", ev.currentTarget, "英文");
 document.getElementById("clearBtn").onclick = () => {
@@ -281,6 +324,9 @@ document.addEventListener("keydown", e => {
   if (mode==="browse" && !drawer.classList.contains("open") && e.key==="ArrowRight") renderPage(page+1);
 });
 window.addEventListener("resize", () => { clearTimeout(window.__rs); window.__rs=setTimeout(sizeCanvas,120); });
+window.addEventListener("beforeprint", redraw);
+window.addEventListener("afterprint", redraw);
+loadPreferences();
 renderPage(1);
 </script>
 </body></html>
