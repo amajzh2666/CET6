@@ -15,7 +15,7 @@ input::placeholder{color:var(--ctrl-placeholder);opacity:1}
 .search{flex:1;min-width:180px;max-width:360px;padding:8px 10px;border:1px solid var(--ctrl-border);border-radius:9px;background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important}
 button{border:1px solid var(--ctrl-border);background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important;border-radius:9px;padding:7px 10px;cursor:pointer}
 button:hover{background:#f7f7fa!important}
-.mode.active{border-color:var(--purple);background:var(--ctrl-bg)!important;color:var(--purple)!important;font-weight:700;box-shadow:0 0 0 1px rgba(102,83,157,.08) inset}
+.mode.active,.cover.active{border-color:var(--purple);background:var(--ctrl-bg)!important;color:var(--purple)!important;font-weight:700;box-shadow:0 0 0 1px rgba(102,83,157,.08) inset}
 .pagebox{width:62px;padding:7px;border:1px solid var(--ctrl-border);border-radius:8px;background:var(--ctrl-bg)!important;color:var(--ctrl-text)!important;text-align:center}
 .status{font-size:12px;color:#666}
 .wrap{padding:16px}
@@ -30,6 +30,7 @@ button:hover{background:#f7f7fa!important}
 .word{font-weight:700;cursor:pointer;position:relative;padding-left:20px}
 .word::before{content:"";position:absolute;left:7px;top:50%;width:9px;height:9px;background:#e4e6eb;transform:translateY(-50%)}
 .word:hover{background:#fff2f4;color:#bd4357}
+body.hide-english .word-text,body.hide-chinese .meaning-text{visibility:hidden;user-select:none}
 .footer{margin-top:14px;display:flex;justify-content:space-between;font-size:11px;color:#777}
 #ink{position:absolute;inset:0;width:100%;height:100%;z-index:40;pointer-events:none;touch-action:none}
 body.draw #ink,body.erase #ink{pointer-events:auto;cursor:crosshair}
@@ -58,6 +59,8 @@ body.draw .word,body.erase .word{pointer-events:none}
   <button id="prev">←</button>
   <input id="pageInput" class="pagebox" type="number" min="1" max="150" value="1" title="输入页码后按 Enter">
   <button id="next">→</button>
+  <button id="hideChineseBtn" class="cover" type="button" aria-pressed="false" title="遮盖表格中的中文释义，再次点击恢复">遮盖中文</button>
+  <button id="hideEnglishBtn" class="cover" type="button" aria-pressed="false" title="遮盖表格中的英文单词，再次点击恢复">遮盖英文</button>
   <button id="browseBtn" class="mode active">👆 浏览</button>
   <button id="penBtn" class="mode">✍ 手写</button>
   <button id="eraserBtn" class="mode">⌫ 橡皮</button>
@@ -192,10 +195,10 @@ function renderPage(n) {
   const arr = DATA.pages[String(page)] || [];
   let rows = "";
   for (const e of arr) {
-    rows += `<div class="cell word" data-word="${esc(e.word.toLowerCase())}">${esc(e.word)}</div>
+    rows += `<div class="cell word" data-word="${esc(e.word.toLowerCase())}"><span class="word-text">${esc(e.word)}</span></div>
              <div class="cell blank"></div>
              <div class="cell blank"></div>
-             <div class="cell meaning">${esc(e.meaning)}</div>`;
+             <div class="cell meaning"><span class="meaning-text">${esc(e.meaning)}</span></div>`;
   }
   sheet.innerHTML = `
     <div class="sheethead">
@@ -226,6 +229,13 @@ function openWord(w) {
   drawer.classList.add("open"); overlay.classList.add("show");
 }
 function closeDrawer() { drawer.classList.remove("open"); overlay.classList.remove("show"); }
+function toggleCover(language, button, label) {
+  const hidden = document.body.classList.toggle("hide-" + language);
+  button.classList.toggle("active", hidden);
+  button.setAttribute("aria-pressed", String(hidden));
+  button.textContent = (hidden ? "显示" : "遮盖") + label;
+  closeDrawer();
+}
 function setMode(next) {
   mode = next;
   document.body.classList.toggle("draw", mode==="draw");
@@ -240,6 +250,8 @@ pageInput.addEventListener("change", () => renderPage(pageInput.value));
 document.getElementById("browseBtn").onclick = () => setMode("browse");
 document.getElementById("penBtn").onclick = () => setMode("draw");
 document.getElementById("eraserBtn").onclick = () => setMode("erase");
+document.getElementById("hideChineseBtn").onclick = ev => toggleCover("chinese", ev.currentTarget, "中文");
+document.getElementById("hideEnglishBtn").onclick = ev => toggleCover("english", ev.currentTarget, "英文");
 document.getElementById("clearBtn").onclick = () => {
   if (confirm("确定清空这一页的全部笔迹吗？")) { strokes=[]; saveInk(); redraw(); }
 };
@@ -260,7 +272,7 @@ document.getElementById("search").addEventListener("keydown", e => {
   setTimeout(() => {
     const el = [...document.querySelectorAll(".word")].find(x=>x.dataset.word===found.word);
     if (el) { el.classList.add("hit"); el.scrollIntoView({block:"center"}); setTimeout(()=>el.classList.remove("hit"),1400); }
-    openWord(found.word);
+    if (!document.body.classList.contains("hide-chinese") && !document.body.classList.contains("hide-english")) openWord(found.word);
   }, 50);
 });
 document.addEventListener("keydown", e => {
